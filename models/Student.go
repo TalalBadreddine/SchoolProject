@@ -3,6 +3,7 @@ package models
 import (
 	"fmt"
 	"server/storage"
+	"strings"
 
 	"github.com/jinzhu/gorm"
 )
@@ -11,7 +12,7 @@ type Student struct {
 	gorm.Model
 	FirstName string   `json:"firstName" gorm:"column:first_name"`
 	LastName  string   `json:"lastName" gorm:"column:last_name"`
-	Classes   []*Class `gorm:"many2many:studentsClasses; constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	Classes   []*Class `json:"studentsClasses" gorm:"many2many:studentsClasses; constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }
 
 type StudentClassRequest struct {
@@ -66,15 +67,14 @@ func GetAllStudents() []*Student {
 	return students
 }
 
-func SearchStudents(filter Filter) []*Student {
+func SearchStudents(filter Filter) []Student {
 	var db = storage.GetDBInstance()
-	var students []*Student
+	var students []Student
 
-	// var classArray = strings.Split(filter.Class, ",")
-	// var teacherArray = strings.Split(filter.Teacher, ",")
-	// filterByTeacher(teacherArray)
+	var classArray = strings.Split(filter.Class, ",")
+	var teacherArray = strings.Split(filter.Teacher, ",")
 
-	db.Scopes(FilterByClass(&filter.Class)).Find(&students)
+	db.Scopes(FilterByClasses(classArray), FilterByTeachers(teacherArray)).Find(&students)
 	return students
 }
 

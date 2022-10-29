@@ -43,3 +43,14 @@ func GetStudents(c echo.Context) error {
 
 	return c.String(http.StatusOK, results)
 }
+
+func GetClassesByStudentId(c echo.Context) error {
+	id := c.Param("id")
+	var filter models.Filter
+
+	results := models.SearchStudents(filter)
+
+	fmt.Print(results)
+
+	return c.String(http.StatusOK, id)
+}

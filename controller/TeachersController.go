@@ -33,7 +33,15 @@ func AddTeacherToClass(c echo.Context) error {
 }
 
 func GetTeachers(c echo.Context) error {
-	return c.String(http.StatusOK, "Get all teachers")
+
+	var teachers []*models.Teacher = models.GetAllTeachers()
+	var results string
+
+	for _, teacher := range teachers {
+		results += models.DisplayTeacher(*teacher)
+	}
+
+	return c.String(http.StatusOK, results)
 }
 
 func GetStudentsByTeacherId(c echo.Context) error {

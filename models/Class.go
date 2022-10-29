@@ -19,7 +19,7 @@ func AddClass(class Class) string {
 	var db = storage.GetDBInstance()
 
 	err := db.Create(&class)
-	message := fmt.Sprintf("Class With Subject: %v %v is added", class.Subject, class.Code)
+	message := "Added " + DisplayClass(class)
 
 	if err.Error != nil {
 		message = fmt.Sprintf("Error: %v", err.Error.Error())
@@ -28,7 +28,10 @@ func AddClass(class Class) string {
 	return message
 }
 
-// TODO: if class doest not exist it's getting greated
+func DisplayClass(class Class) string {
+	return fmt.Sprintf("ID: %v ,Subject: %v , Class Code: %v \n", class.ID, class.Subject, class.Code)
+}
+
 func GetClassById(classId int) Class {
 	var db = storage.GetDBInstance()
 
@@ -37,4 +40,13 @@ func GetClassById(classId int) Class {
 	db.First(&class, classId)
 
 	return class
+}
+
+func GetAllClasses() []*Class {
+	var db = storage.GetDBInstance()
+	var classes []*Class
+
+	db.Find(&classes)
+
+	return classes
 }
