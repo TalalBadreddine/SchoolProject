@@ -3,41 +3,42 @@ package controller
 import (
 	"fmt"
 	"net/http"
-	"server/models"
+	"server/dto"
+	"server/entity"
 	"server/storage"
+	"server/utils"
 
 	"github.com/labstack/echo/v4"
 )
 
 func AddClass(c echo.Context) error {
-	var class models.Class = models.Class{}
+	var class entity.Class = entity.Class{}
 
 	if err := c.Bind(&class); err != nil {
 		return err
 	}
 
-	message := models.AddClass(class)
+	message := utils.AddClass(class)
 
-	return c.String(http.StatusOK, message)
+	return c.JSON(http.StatusOK, message)
 }
 
 func GetClasses(c echo.Context) error {
 
-	classes := models.GetAllClasses()
-
-	var message string
+	classes := utils.GetAllClasses()
+	var classesDto []*dto.Class
 
 	for _, class := range classes {
-		message += models.DisplayClass(*class)
+		classesDto = append(classesDto, dto.MapClassDto(class))
 	}
 
-	return c.String(http.StatusOK, message)
+	return c.JSON(http.StatusOK, classesDto)
 }
 
 func GetStudentsByClassId(c echo.Context) error {
 	// id := c.Param("id")
 	var db = storage.GetDBInstance()
-	var students []models.Student
+	var students []entity.Student
 
 	// err := db.Preload("Classes").Joins("JOIN studentsClasses ON studentsClasses.student_id = student.id").
 	// 	Joins("JOIN classes ON studentsClasses.class_id = class.id").
@@ -49,8 +50,8 @@ func GetStudentsByClassId(c echo.Context) error {
 	fmt.Print(students)
 	fmt.Print(err.Error)
 
-	// var filter models.Filter = models.Filter{Class: id}
-	// var students = models.SearchStudents(filter)
+	// var filter entity.Filter = entity.Filter{Class: id}
+	// var students = entity.SearchStudents(filter)
 
 	// results := "No Students Are found"
 

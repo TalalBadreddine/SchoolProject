@@ -1,13 +1,15 @@
-package models
+package entity
 
 import (
 	"github.com/jinzhu/gorm"
 )
 
 type Filter struct {
-	Class   string `json:"class"`
-	Student string `json:"student"`
-	Teacher string `json:"teacher"`
+	Class    string `json:"class"`
+	Student  string `json:"student"`
+	Teacher  string `json:"teacher"`
+	Page     int    `json:"page"`
+	PageSize int    `json:"pageSize"`
 }
 
 func FilterByClass(class *string) func(db *gorm.DB) *gorm.DB {
@@ -25,6 +27,15 @@ func FilterByClasses(class []string) func(db *gorm.DB) *gorm.DB {
 			return db
 		}
 		return db.Where("classs IN (?)", class)
+	}
+}
+
+func FilterByStudents(student []string) func(db *gorm.DB) *gorm.DB {
+	return func(db *gorm.DB) *gorm.DB {
+		if nil == student || len(student) == 0 || student[0] == "" {
+			return db
+		}
+		return db.Where("classs IN (?)", student)
 	}
 }
 

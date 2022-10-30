@@ -1,7 +1,7 @@
 package main
 
 import (
-	"server/models"
+	"server/entity"
 	"server/routes"
 	"server/storage"
 
@@ -13,8 +13,8 @@ func main() {
 
 	storage.NewDB()
 
-	// storage.GetDBInstance().DropTableIfExists(&models.Student{}, &models.Class{}, &models.Teacher{})
-	storage.GetDBInstance().AutoMigrate(&models.Student{}, &models.Class{}, &models.Teacher{})
+	// storage.GetDBInstance().DropTableIfExists(&entity.Student{}, &entity.Class{}, &entity.Teacher{})
+	storage.GetDBInstance().AutoMigrate(&entity.Student{}, &entity.Class{}, &entity.Teacher{})
 
 	routes.InitStudentsRoutes(e)
 	routes.InitTeachersRoutes(e)

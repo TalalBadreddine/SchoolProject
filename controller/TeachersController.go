@@ -3,45 +3,47 @@ package controller
 import (
 	"fmt"
 	"net/http"
-	"server/models"
+	"server/dto"
+	"server/entity"
+	"server/utils"
 
 	"github.com/labstack/echo/v4"
 )
 
 func AddTeacher(c echo.Context) error {
-	var teacher models.Teacher
+	var teacher entity.Teacher
 
 	if err := c.Bind(&teacher); err != nil {
 		return err
 	}
 
-	results := models.AddTeacher(teacher)
+	results := dto.MapTeacherDto(utils.AddTeacher(teacher))
 
-	return c.String(http.StatusOK, results)
+	return c.JSON(http.StatusOK, results)
 }
 
 func AddTeacherToClass(c echo.Context) error {
-	var request models.TeacherClassRequest = models.TeacherClassRequest{}
+	var request entity.TeacherClassRequest = entity.TeacherClassRequest{}
 
 	if err := c.Bind(&request); err != nil {
 		return err
 	}
 
-	message := models.AddTeacherInClass(request.TeacherId, request.ClassId)
+	message := dto.MapTeacherDto(utils.AddTeacherInClass(request.TeacherId, request.ClassId))
 
-	return c.String(http.StatusOK, message)
+	return c.JSON(http.StatusOK, message)
 }
 
 func GetTeachers(c echo.Context) error {
-
-	var teachers []*models.Teacher = models.GetAllTeachers()
-	var results string
+	var filter entity.Filter
+	var teachers []*entity.Teacher = utils.SearchTeachers(filter)
+	var teachersDto []*dto.Teacher
 
 	for _, teacher := range teachers {
-		results += models.DisplayTeacher(*teacher)
+		teachersDto = append(teachersDto, dto.MapTeacherDto(teacher))
 	}
 
-	return c.String(http.StatusOK, results)
+	return c.JSON(http.StatusOK, teachersDto)
 }
 
 func GetStudentsByTeacherId(c echo.Context) error {
