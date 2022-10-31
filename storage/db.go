@@ -15,7 +15,6 @@ func NewDB(params ...string) *gorm.DB {
 	var err error
 	conString := config.GetPostgresConnectionString()
 
-	// DB, err = gorm.Open(config.GetDBType(), conString)
 	DB, err = gorm.Open(postgres.Open(conString), &gorm.Config{})
 
 	if err != nil {

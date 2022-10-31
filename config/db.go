@@ -21,5 +21,3 @@ func GetPostgresConnectionString() string {
 	dataBase := fmt.Sprintf("host=%s port=%s dbname=%s password=%s sslmode=disable", DBHOST, DBPORT, DBNAME, DBPASSWORD)
 	return dataBase
 }
-
-// .yml

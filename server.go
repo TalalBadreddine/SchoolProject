@@ -13,7 +13,6 @@ func main() {
 
 	storage.NewDB()
 
-	// storage.GetDBInstance().DropTableIfExists(&entity.Student{}, &entity.Class{}, &entity.Teacher{})
 	storage.GetDBInstance().AutoMigrate(&entity.Student{}, &entity.Class{}, &entity.Teacher{})
 
 	routes.InitStudentsRoutes(e)
