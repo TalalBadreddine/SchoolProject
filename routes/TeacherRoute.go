@@ -13,5 +13,3 @@ func InitTeachersRoutes(e *echo.Echo) {
 	e.GET("Teacher/:id/student", controller.GetStudentsByTeacherId)
 	// e.GET("Teacher/:id/class", controller.GetTeacherByClassId)
 }
-
-// Join between teacher class teacherClasses, where (teacher.id = teacherClasses.teacher_id)
