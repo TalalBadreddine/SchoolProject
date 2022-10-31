@@ -1,68 +1,22 @@
 package repository
 
 import (
-	"log"
+	"gorm.io/gorm"
 	"server/entity"
 	"server/filter"
 	"server/storage"
 	"strings"
 )
 
-func StudentExist(target entity.Student) entity.Student {
-	var db = storage.GetDBInstance()
-
-	var student entity.Student
-	db.First(&student, target.ID)
-
-	return student
+type StudentRepository struct {
+	db *gorm.DB
 }
 
-func AddStudent(student entity.Student) *entity.Student {
-	var db = storage.GetDBInstance()
-
-	err := db.Create(&student)
-
-	if err.Error != nil {
-		log.Panic(err.Error.Error())
-	}
-
-	return &student
+func ProvideStudentRepository(db *gorm.DB) StudentRepository {
+	return StudentRepository{db: db}
 }
 
-func GetAllStudents() []*entity.Student {
-	var db = storage.GetDBInstance()
-
-	var students []*entity.Student
-
-	db.Find(&students)
-
-	return students
-}
-
-func AddStudentInClass(studentId int, classId int) *entity.Student {
-	var db = storage.GetDBInstance()
-	var class = GetClassById(classId)
-	var student entity.Student
-
-	db.First(&student, studentId)
-
-	student.Classes = append(student.Classes, &class)
-	db.Save(&student)
-
-	return &student
-}
-
-func GetStudentById(studentId int) entity.Student {
-	var db = storage.GetDBInstance()
-
-	var student entity.Student
-
-	db.First(&student, studentId)
-
-	return student
-}
-
-func SearchStudents(filter filter.StudentFilter) []*entity.Student {
+func (s StudentRepository) SearchStudents(filter filter.StudentFilter) []*entity.Student {
 	var db = storage.GetDBInstance()
 	var students []*entity.Student
 
@@ -74,7 +28,6 @@ func SearchStudents(filter filter.StudentFilter) []*entity.Student {
 
 	var classArray = strings.Split(filter.ClassesId, ",")
 	var studentArray = strings.Split(filter.StudentsId, ",")
-	//var teacherArray = strings.Split(filter.Teacher, ",")
 
 	db.Preload("Classes").
 		Preload("Classes.Teachers").

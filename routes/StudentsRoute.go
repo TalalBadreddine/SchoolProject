@@ -1,16 +1,13 @@
 package routes
 
 import (
-	"server/controller"
-
 	"github.com/labstack/echo/v4"
+	"gorm.io/gorm"
+	"server/config"
 )
 
-func InitStudentsRoutes(e *echo.Echo) {
-	e.POST("Student", controller.AddStudent)
-	e.GET("Student", controller.GetStudents)
-	e.GET("Student/:id", controller.GetStudentById)
-	e.PUT("Student/Class", controller.AddStudentToClass)
-	e.GET("Student/Class/:id", controller.GetClassesByStudentId)
-	// e.GET("Student/Teacher/:id", controller.GetTeachersByStudentsId)
+func InitStudentsRoutes(e *echo.Echo, db *gorm.DB) {
+	StudentApi := config.WireStudentApi(db)
+
+	e.GET("students", StudentApi.GetStudents)
 }

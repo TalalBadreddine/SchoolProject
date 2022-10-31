@@ -12,6 +12,7 @@ type Filter struct {
 	PageSize int    `json:"pageSize"`
 }
 
+//TODO move all scopes to entity
 func FilterByClassesId(class []string) func(db *gorm.DB) *gorm.DB {
 	return func(db *gorm.DB) *gorm.DB {
 		if nil == class || len(class) == 0 || class[0] == "" {

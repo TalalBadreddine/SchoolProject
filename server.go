@@ -11,11 +11,14 @@ import (
 func main() {
 	e := echo.New()
 
-	storage.NewDB()
+	db := storage.NewDB()
 
-	storage.GetDBInstance().AutoMigrate(&entity.Student{}, &entity.Class{}, &entity.Teacher{})
+	err := storage.GetDBInstance().AutoMigrate(&entity.Student{}, &entity.Class{}, &entity.Teacher{})
+	if err != nil {
+		return
+	}
 
-	routes.InitStudentsRoutes(e)
+	routes.InitStudentsRoutes(e, db)
 	routes.InitTeachersRoutes(e)
 	routes.InitClassesRoutes(e)
 
