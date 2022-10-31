@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"server/dto"
 	"server/entity"
+	"server/filter"
 	"server/repository"
 
 	"github.com/labstack/echo/v4"
@@ -23,8 +24,16 @@ func AddClass(c echo.Context) error {
 }
 
 func GetClasses(c echo.Context) error {
-	var filter repository.Filter
-	classes := repository.SearchClasses(filter)
+
+	var classFilter filter.ClassFilter
+
+	err := c.Bind(&classFilter)
+
+	if err != nil {
+		return err
+	}
+
+	classes := repository.SearchClasses(classFilter)
 	var classesDto []*dto.Class
 
 	for _, class := range classes {

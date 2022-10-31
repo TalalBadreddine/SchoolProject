@@ -12,30 +12,21 @@ type Filter struct {
 	PageSize int    `json:"pageSize"`
 }
 
-func FilterByClass(class *string) func(db *gorm.DB) *gorm.DB {
-	return func(db *gorm.DB) *gorm.DB {
-		if *class == "" {
-			return db
-		}
-		return db.Where("classs = ?", class)
-	}
-}
-
-func FilterByClasses(class []string) func(db *gorm.DB) *gorm.DB {
+func FilterByClassesId(class []string) func(db *gorm.DB) *gorm.DB {
 	return func(db *gorm.DB) *gorm.DB {
 		if nil == class || len(class) == 0 || class[0] == "" {
 			return db
 		}
-		return db.Where("FirstName IN (?)", class)
+		return db.Where("classes.id IN (?)", class)
 	}
 }
 
-func FilterByStudents(student []string) func(db *gorm.DB) *gorm.DB {
+func FilterByStudentsId(student []string) func(db *gorm.DB) *gorm.DB {
 	return func(db *gorm.DB) *gorm.DB {
 		if nil == student || len(student) == 0 || student[0] == "" {
 			return db
 		}
-		return db.Where("classs IN (?)", student)
+		return db.Where("students.id IN (?)", student)
 	}
 }
 
@@ -44,6 +35,6 @@ func FilterByTeachers(teachers []string) func(db *gorm.DB) *gorm.DB {
 		if nil == teachers || len(teachers) == 0 || teachers[0] == "" {
 			return db
 		}
-		return db.Where("teacher IN (?)", teachers)
+		return db.Where("teachers.id IN (?)", teachers)
 	}
 }

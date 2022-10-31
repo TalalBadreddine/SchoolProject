@@ -3,6 +3,7 @@ package repository
 import (
 	"fmt"
 	"server/entity"
+	"server/filter"
 	"server/storage"
 	"strings"
 )
@@ -42,21 +43,28 @@ func DisplayClass(class entity.Class) string {
 	return fmt.Sprintf("ID: %v ,Subject: %v , Class Code: %v \n", class.ID, class.Subject, class.Code)
 }
 
-func SearchClasses(filter Filter) []*entity.Class {
+func SearchClasses(filter filter.ClassFilter) []*entity.Class {
 	var db = storage.GetDBInstance()
 	var classes []*entity.Class
 
-	offset := (filter.Page * filter.PageSize)
-	filter.PageSize = 5
+	if filter.PerPage == 0 {
+		filter.PerPage = 5
+	}
 
-	var studentArray = strings.Split(filter.Student, ",")
-	var teacherArray = strings.Split(filter.Teacher, ",")
+	offset := (filter.Page) * filter.PerPage
+
+	var studentArray = strings.Split(filter.StudentId, ",")
+	//var teacherArray = strings.Split(filter.Teacher, ",")
 
 	db.Preload("Teachers").
 		Preload("Students").
-		Scopes(FilterByStudents(studentArray), FilterByTeachers(teacherArray)).
+		Joins("LEFT JOIN students_classes on students_classes.class_id = classes.id").
+		Joins("JOIN students on students.id = students_classes.student_id").
+		Joins("LEFT JOIN teacher_classes on teacher_classes.class_id = classes.id").
+		Joins("JOIN teachers on teachers.id = teacher_classes.teacher_id").
+		Scopes(FilterByStudentsId(studentArray)).
 		Offset(offset).
-		Limit(filter.PageSize).
+		Limit(filter.PerPage).
 		Find(&classes)
 
 	return classes

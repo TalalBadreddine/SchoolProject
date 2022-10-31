@@ -3,6 +3,7 @@ package repository
 import (
 	"log"
 	"server/entity"
+	"server/filter"
 	"server/storage"
 	"strings"
 )
@@ -61,24 +62,28 @@ func GetStudentById(studentId int) entity.Student {
 	return student
 }
 
-func SearchStudents(filter Filter) []*entity.Student {
+func SearchStudents(filter filter.StudentFilter) []*entity.Student {
 	var db = storage.GetDBInstance()
 	var students []*entity.Student
 
-	offset := (filter.Page * filter.PageSize)
-
-	if filter.PageSize == 0 {
-		filter.PageSize = 20
+	if filter.PerPage == 0 {
+		filter.PerPage = 5
 	}
 
-	var classArray = strings.Split(filter.Class, ",")
-	var teacherArray = strings.Split(filter.Teacher, ",")
+	offset := (filter.Page - 1) * filter.PerPage
+
+	var classArray = strings.Split(filter.ClassesId, ",")
+	var studentArray = strings.Split(filter.StudentsId, ",")
+	//var teacherArray = strings.Split(filter.Teacher, ",")
 
 	db.Preload("Classes").
 		Preload("Classes.Teachers").
-		Scopes(FilterByClasses(classArray), FilterByTeachers(teacherArray)).
+		Preload("Classes.Students").
+		Joins("LEFT JOIN students_classes on students_classes.student_id = students.id").
+		Joins("JOIN classes on classes.id = students_classes.class_id").
+		Scopes(FilterByClassesId(classArray), FilterByStudentsId(studentArray)).
 		Offset(offset).
-		Limit(filter.PageSize).
+		Limit(filter.PerPage).
 		Find(&students)
 
 	return students

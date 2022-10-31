@@ -7,7 +7,7 @@ import (
 )
 
 func InitTeachersRoutes(e *echo.Echo) {
-	e.GET("Teacher", controller.GetTeachers)
+	e.GET("Teacher/:page", controller.GetTeachers)
 	e.POST("Teacher", controller.AddTeacher)
 	e.PUT("Teacher/Class", controller.AddTeacherToClass)
 	e.GET("Teacher/:id/student", controller.GetStudentsByTeacherId)

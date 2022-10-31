@@ -8,8 +8,8 @@ type Class struct {
 	id       uint
 	Subject  string
 	Code     string
-	Teachers []*Teacher
-	Students []*Student
+	Teachers []*GeneralTeacher
+	Students []*GeneralStudent
 }
 
 type GeneralClass struct {
@@ -19,15 +19,15 @@ type GeneralClass struct {
 }
 
 func MapClassDto(class *entity.Class) *Class {
-	var teachers []*Teacher
-	var students []*Student
+	var teachers []*GeneralTeacher
+	var students []*GeneralStudent
 
 	for _, teacher := range class.Teachers {
-		teachers = append(teachers, MapTeacherDto(teacher))
+		teachers = append(teachers, MapGeneralTeacherDto(teacher))
 	}
 
 	for _, student := range class.Students {
-		students = append(students, MapStudentDto(student))
+		students = append(students, MapGeneralStudentDto(student))
 	}
 
 	return &Class{

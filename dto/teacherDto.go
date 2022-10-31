@@ -30,7 +30,7 @@ func MapTeacherDto(teacher *entity.Teacher) *Teacher {
 	}
 }
 
-func MapGeneralTeacher(teacher entity.Teacher) *GeneralTeacher {
+func MapGeneralTeacherDto(teacher *entity.Teacher) *GeneralTeacher {
 	return &GeneralTeacher{
 		id:        teacher.ID,
 		FirstName: teacher.FirstName,

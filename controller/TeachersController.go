@@ -6,6 +6,7 @@ import (
 	"server/dto"
 	"server/entity"
 	"server/repository"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
@@ -36,6 +37,9 @@ func AddTeacherToClass(c echo.Context) error {
 
 func GetTeachers(c echo.Context) error {
 	var filter repository.Filter
+	pageStr := c.Param("page")
+	page, _ := strconv.Atoi(pageStr)
+	filter.Page = page
 	var teachers []*entity.Teacher = repository.SearchTeachers(filter)
 	var teachersDto []*dto.Teacher
 

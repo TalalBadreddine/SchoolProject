@@ -60,15 +60,22 @@ func SearchTeachers(filter Filter) []*entity.Teacher {
 	var db = storage.GetDBInstance()
 	var teachers []*entity.Teacher
 
-	offset := (filter.Page * filter.PageSize)
-
 	if filter.PageSize == 0 {
-		filter.PageSize = 20
+		filter.PageSize = 5
 	}
+
+	offset := (filter.Page - 1) * filter.PageSize
 
 	var classArray = strings.Split(filter.Class, ",")
 	var studentArray = strings.Split(filter.Student, ",")
 
-	db.Limit(filter.PageSize).Offset(offset).Scopes(FilterByClasses(classArray), FilterByStudents(studentArray)).Preload("Classes").Find(&teachers)
+	db.Preload("Classes").
+		Preload("Classes.Teachers").
+		Preload("Classes.Students").
+		Scopes(FilterByClassesId(classArray), FilterByStudentsId(studentArray)).
+		Offset(offset).
+		Limit(filter.PageSize).
+		Find(&teachers)
+
 	return teachers
 }
