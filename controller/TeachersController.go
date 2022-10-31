@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"server/dto"
 	"server/entity"
-	"server/utils"
+	"server/repository"
 
 	"github.com/labstack/echo/v4"
 )
@@ -17,7 +17,7 @@ func AddTeacher(c echo.Context) error {
 		return err
 	}
 
-	results := dto.MapTeacherDto(utils.AddTeacher(teacher))
+	results := dto.MapTeacherDto(repository.AddTeacher(teacher))
 
 	return c.JSON(http.StatusOK, results)
 }
@@ -29,14 +29,14 @@ func AddTeacherToClass(c echo.Context) error {
 		return err
 	}
 
-	message := dto.MapTeacherDto(utils.AddTeacherInClass(request.TeacherId, request.ClassId))
+	message := dto.MapTeacherDto(repository.AddTeacherInClass(request.TeacherId, request.ClassId))
 
 	return c.JSON(http.StatusOK, message)
 }
 
 func GetTeachers(c echo.Context) error {
-	var filter entity.Filter
-	var teachers []*entity.Teacher = utils.SearchTeachers(filter)
+	var filter repository.Filter
+	var teachers []*entity.Teacher = repository.SearchTeachers(filter)
 	var teachersDto []*dto.Teacher
 
 	for _, teacher := range teachers {

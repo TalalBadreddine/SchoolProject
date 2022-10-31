@@ -1,6 +1,8 @@
-package entity
+package repository
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+)
 
 type Filter struct {
 	Class    string `json:"class"`
@@ -15,7 +17,7 @@ func FilterByClass(class *string) func(db *gorm.DB) *gorm.DB {
 		if *class == "" {
 			return db
 		}
-		return db.Where("classs =?", class)
+		return db.Where("classs = ?", class)
 	}
 }
 
@@ -24,7 +26,7 @@ func FilterByClasses(class []string) func(db *gorm.DB) *gorm.DB {
 		if nil == class || len(class) == 0 || class[0] == "" {
 			return db
 		}
-		return db.Where("classs IN (?)", class)
+		return db.Where("FirstName IN (?)", class)
 	}
 }
 

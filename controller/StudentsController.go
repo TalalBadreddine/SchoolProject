@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"server/dto"
 	"server/entity"
-	"server/utils"
+	"server/repository"
 
 	"github.com/labstack/echo/v4"
 )
@@ -17,7 +17,7 @@ func AddStudent(c echo.Context) error {
 		return err
 	}
 
-	results := dto.MapStudentDto(utils.AddStudent(student))
+	results := dto.MapStudentDto(repository.AddStudent(student))
 
 	return c.JSON(http.StatusOK, *results)
 }
@@ -29,15 +29,15 @@ func AddStudentToClass(c echo.Context) error {
 		return err
 	}
 
-	message := dto.MapStudentDto(utils.AddStudentInClass(request.StudentId, request.ClassId))
+	message := dto.MapStudentDto(repository.AddStudentInClass(request.StudentId, request.ClassId))
 
 	return c.JSON(http.StatusOK, message)
 
 }
 
 func GetStudents(c echo.Context) error {
-	var filter entity.Filter
-	var students []*entity.Student = utils.SearchStudents(filter)
+	var filter repository.Filter
+	var students []*entity.Student = repository.SearchStudents(filter)
 	var studentsDto []*dto.Student
 
 	for _, student := range students {
@@ -49,11 +49,27 @@ func GetStudents(c echo.Context) error {
 
 func GetClassesByStudentId(c echo.Context) error {
 	id := c.Param("id")
-	var filter entity.Filter
+	var filter repository.Filter
 
-	results := utils.SearchStudents(filter)
+	results := repository.SearchStudents(filter)
 
 	fmt.Print(results)
 
 	return c.String(http.StatusOK, id)
+}
+
+func GetStudentById(c echo.Context) error {
+	id := c.Param("id")
+	var students []dto.Student
+
+	var filter repository.Filter
+	fmt.Println(id)
+
+	results := repository.SearchStudents(filter)
+
+	for _, student := range results {
+		students = append(students, *dto.MapStudentDto(student))
+	}
+
+	return c.JSON(http.StatusOK, students)
 }

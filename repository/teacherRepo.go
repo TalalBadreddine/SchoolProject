@@ -1,4 +1,4 @@
-package utils
+package repository
 
 import (
 	"fmt"
@@ -56,15 +56,19 @@ func GetAllTeachers() []*entity.Teacher {
 	return teacher
 }
 
-func SearchTeachers(filter entity.Filter) []*entity.Teacher {
+func SearchTeachers(filter Filter) []*entity.Teacher {
 	var db = storage.GetDBInstance()
 	var teachers []*entity.Teacher
 
-	offset := (filter.Page - 1) * filter.PageSize
+	offset := (filter.Page * filter.PageSize)
+
+	if filter.PageSize == 0 {
+		filter.PageSize = 20
+	}
 
 	var classArray = strings.Split(filter.Class, ",")
 	var studentArray = strings.Split(filter.Student, ",")
 
-	db.Limit(filter.PageSize).Offset(offset).Scopes(entity.FilterByClasses(classArray), entity.FilterByStudents(studentArray)).Preload("Classes").Find(&teachers)
+	db.Limit(filter.PageSize).Offset(offset).Scopes(FilterByClasses(classArray), FilterByStudents(studentArray)).Preload("Classes").Find(&teachers)
 	return teachers
 }

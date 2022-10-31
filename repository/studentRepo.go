@@ -1,4 +1,4 @@
-package utils
+package repository
 
 import (
 	"log"
@@ -61,19 +61,22 @@ func GetStudentById(studentId int) entity.Student {
 	return student
 }
 
-func SearchStudents(filter entity.Filter) []*entity.Student {
+func SearchStudents(filter Filter) []*entity.Student {
 	var db = storage.GetDBInstance()
 	var students []*entity.Student
 
 	offset := (filter.Page * filter.PageSize)
-	filter.PageSize = 3
+
+	if filter.PageSize == 0 {
+		filter.PageSize = 20
+	}
 
 	var classArray = strings.Split(filter.Class, ",")
 	var teacherArray = strings.Split(filter.Teacher, ",")
 
 	db.Preload("Classes").
 		Preload("Classes.Teachers").
-		Scopes(entity.FilterByClasses(classArray), entity.FilterByTeachers(teacherArray)).
+		Scopes(FilterByClasses(classArray), FilterByTeachers(teacherArray)).
 		Offset(offset).
 		Limit(filter.PageSize).
 		Find(&students)
