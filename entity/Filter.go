@@ -1,8 +1,6 @@
 package entity
 
-import (
-	"github.com/jinzhu/gorm"
-)
+import "gorm.io/gorm"
 
 type Filter struct {
 	Class    string `json:"class"`

@@ -9,6 +9,12 @@ type Teacher struct {
 	Classes   []*Class
 }
 
+type GeneralTeacher struct {
+	id        uint
+	FirstName string
+	LastName  string
+}
+
 func MapTeacherDto(teacher *entity.Teacher) *Teacher {
 	var classes []*Class
 
@@ -21,5 +27,13 @@ func MapTeacherDto(teacher *entity.Teacher) *Teacher {
 		FirstName: teacher.FirstName,
 		LastName:  teacher.LastName,
 		Classes:   classes,
+	}
+}
+
+func MapGeneralTeacher(teacher entity.Teacher) *GeneralTeacher {
+	return &GeneralTeacher{
+		id:        teacher.ID,
+		FirstName: teacher.FirstName,
+		LastName:  teacher.LastName,
 	}
 }

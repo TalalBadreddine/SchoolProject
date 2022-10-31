@@ -65,6 +65,6 @@ func SearchTeachers(filter entity.Filter) []*entity.Teacher {
 	var classArray = strings.Split(filter.Class, ",")
 	var studentArray = strings.Split(filter.Student, ",")
 
-	db.Limit(filter.PageSize).Offset(offset).Scopes(entity.FilterByClasses(classArray), entity.FilterByStudents(studentArray)).Preload("Classes").Preload("Teachers").Find(&teachers)
+	db.Limit(filter.PageSize).Offset(offset).Scopes(entity.FilterByClasses(classArray), entity.FilterByStudents(studentArray)).Preload("Classes").Find(&teachers)
 	return teachers
 }

@@ -9,6 +9,12 @@ type Student struct {
 	Classes   []*Class
 }
 
+type GeneralStudent struct {
+	id        uint
+	FirstName string
+	LastName  string
+}
+
 func MapStudentDto(student *entity.Student) *Student {
 
 	var classes []*Class
@@ -22,5 +28,13 @@ func MapStudentDto(student *entity.Student) *Student {
 		FirstName: student.FirstName,
 		LastName:  student.LastName,
 		Classes:   classes,
+	}
+}
+
+func MapGeneralStudentDto(student *entity.Student) *GeneralStudent {
+	return &GeneralStudent{
+		id:        student.ID,
+		FirstName: student.FirstName,
+		LastName:  student.LastName,
 	}
 }

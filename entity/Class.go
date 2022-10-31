@@ -8,6 +8,6 @@ type Class struct {
 	gorm.Model
 	Subject  string
 	Code     string
-	Teachers []*Teacher `gorm:"many2many:teacherClasses; constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
-	Students []*Student `gorm:"many2many:studentsClasses; constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	Teachers []*Teacher `gorm:"many2many:teacher_classes; constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	Students []*Student `gorm:"many2many:students_classes; constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }
