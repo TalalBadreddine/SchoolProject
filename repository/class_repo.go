@@ -33,7 +33,7 @@ func (c ClassRepository) SearchClasses(filter filter.ClassFilter) []*entity.Clas
 		Joins("JOIN students on students.id = students_classes.student_id").
 		Joins("LEFT JOIN teacher_classes on teacher_classes.class_id = classes.id").
 		Joins("JOIN teachers on teachers.id = teacher_classes.teacher_id").
-		Scopes(FilterByStudentsId(studentArray)).
+		Scopes(entity.FilterByStudentsId(studentArray)).
 		Offset(offset).
 		Limit(filter.PerPage).
 		Find(&classes)
