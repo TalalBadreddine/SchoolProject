@@ -7,8 +7,6 @@ import (
 )
 
 func InitClassesRoutes(e *echo.Echo) {
-	e.POST("Classes", controller.AddClass)
+
 	e.GET("Classes", controller.GetClasses)
-	e.GET("Classes/student/:id", controller.GetStudentsByClassId)
-	e.GET("Classes/teacher/:id", controller.GetTeachersByClassId)
 }
