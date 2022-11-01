@@ -15,3 +15,12 @@ type TeacherClassRequest struct {
 	TeacherId int `json:"teacherId"`
 	ClassId   int `json:"classId"`
 }
+
+func FilterByTeachers(teachers []string) func(db *gorm.DB) *gorm.DB {
+	return func(db *gorm.DB) *gorm.DB {
+		if nil == teachers || len(teachers) == 0 || teachers[0] == "" {
+			return db
+		}
+		return db.Where("teachers.id IN (?)", teachers)
+	}
+}

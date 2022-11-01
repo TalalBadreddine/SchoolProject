@@ -32,7 +32,7 @@ func (s StudentRepository) SearchStudents(filter filter.StudentFilter) []*entity
 		Preload("Classes.Teachers").
 		Preload("Classes.Students").
 		Joins("LEFT JOIN students_classes on students_classes.student_id = students.id").
-		Joins("JOIN classes on classes.id = students_classes.class_id").
+		Joins("LEFT JOIN classes on classes.id = students_classes.class_id").
 		Scopes(entity.FilterByClassesId(classArray), entity.FilterByStudentsId(studentArray)).
 		Offset(offset).
 		Limit(filter.PerPage).

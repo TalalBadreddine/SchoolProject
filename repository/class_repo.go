@@ -25,7 +25,6 @@ func (c ClassRepository) SearchClasses(filter filter.ClassFilter) []*entity.Clas
 	offset := (filter.Page) * filter.PerPage
 
 	var studentArray = strings.Split(filter.StudentId, ",")
-	//var teacherArray = strings.Split(filter.Teacher, ",")
 
 	c.db.Preload("Teachers").
 		Preload("Students").
