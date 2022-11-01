@@ -17,3 +17,12 @@ func WireStudentApi(db *gorm.DB) controller.Student {
 	)
 	return controller.Student{}
 }
+
+func WireClassApi(db *gorm.DB) controller.Class {
+	wire.Build(
+		controller.ProvideClass,
+		repository.ProvideClassRepository,
+	)
+
+	return controller.Class{}
+}

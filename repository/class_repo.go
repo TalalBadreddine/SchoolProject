@@ -1,14 +1,21 @@
 package repository
 
 import (
+	"gorm.io/gorm"
 	"server/entity"
 	"server/filter"
-	"server/storage"
 	"strings"
 )
 
-func SearchClasses(filter filter.ClassFilter) []*entity.Class {
-	var db = storage.GetDBInstance()
+type ClassRepository struct {
+	db *gorm.DB
+}
+
+func ProvideClassRepository(db *gorm.DB) ClassRepository {
+	return ClassRepository{db: db}
+}
+
+func (c ClassRepository) SearchClasses(filter filter.ClassFilter) []*entity.Class {
 	var classes []*entity.Class
 
 	if filter.PerPage == 0 {
@@ -20,7 +27,7 @@ func SearchClasses(filter filter.ClassFilter) []*entity.Class {
 	var studentArray = strings.Split(filter.StudentId, ",")
 	//var teacherArray = strings.Split(filter.Teacher, ",")
 
-	db.Preload("Teachers").
+	c.db.Preload("Teachers").
 		Preload("Students").
 		Joins("LEFT JOIN students_classes on students_classes.class_id = classes.id").
 		Joins("JOIN students on students.id = students_classes.student_id").

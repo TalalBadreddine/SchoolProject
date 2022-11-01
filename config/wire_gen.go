@@ -19,3 +19,9 @@ func WireStudentApi(db *gorm.DB) controller.Student {
 	student := controller.ProvideStudent(studentRepository)
 	return student
 }
+
+func WireClassApi(db *gorm.DB) controller.Class {
+	classRepository := repository.ProvideClassRepository(db)
+	class := controller.ProvideClass(classRepository)
+	return class
+}

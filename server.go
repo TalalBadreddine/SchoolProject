@@ -19,8 +19,7 @@ func main() {
 	}
 
 	routes.InitStudentsRoutes(e, db)
-	routes.InitTeachersRoutes(e)
-	routes.InitClassesRoutes(e)
+	routes.InitClassesRoutes(e, db)
 
 	e.Logger.Fatal(e.Start(":1323"))
 }

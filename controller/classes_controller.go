@@ -9,7 +9,15 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func GetClasses(c echo.Context) error {
+type Class struct {
+	ClassRepository repository.ClassRepository
+}
+
+func ProvideClass(classRepository repository.ClassRepository) Class {
+	return Class{ClassRepository: classRepository}
+}
+
+func (class Class) GetClasses(c echo.Context) error {
 
 	var classFilter filter.ClassFilter
 
@@ -19,7 +27,7 @@ func GetClasses(c echo.Context) error {
 		return err
 	}
 
-	classes := repository.SearchClasses(classFilter)
+	classes := class.ClassRepository.SearchClasses(classFilter)
 	var classesDto []*dto.Class
 
 	for _, class := range classes {

@@ -4,7 +4,6 @@ import (
 	"gorm.io/gorm"
 	"server/entity"
 	"server/filter"
-	"server/storage"
 	"strings"
 )
 
@@ -17,7 +16,7 @@ func ProvideStudentRepository(db *gorm.DB) StudentRepository {
 }
 
 func (s StudentRepository) SearchStudents(filter filter.StudentFilter) []*entity.Student {
-	var db = storage.GetDBInstance()
+	var db = s.db
 	var students []*entity.Student
 
 	if filter.PerPage == 0 {
