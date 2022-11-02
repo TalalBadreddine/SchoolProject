@@ -27,6 +27,11 @@ func (s StudentRepository) SearchStudents(filter filter.StudentFilter) []*entity
 
 	var classArray = strings.Split(filter.ClassesId, ",")
 	var studentArray = strings.Split(filter.StudentsId, ",")
+	var sortBy = filter.SortBy
+
+	orderByMap := make(map[string]string)
+
+	orderByMap["studentName"] = "students.first_name "
 
 	db.Preload("Classes").
 		Preload("Classes.Teachers").
@@ -37,6 +42,7 @@ func (s StudentRepository) SearchStudents(filter filter.StudentFilter) []*entity
 			entity.FilterByStudentsId(studentArray)).
 		Offset(offset).
 		Limit(filter.PerPage).
+		Order(orderByMap[sortBy] + filter.SortType).
 		Find(&students)
 
 	return students

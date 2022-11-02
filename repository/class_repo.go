@@ -26,6 +26,19 @@ func (c ClassRepository) SearchClasses(filter filter.ClassFilter) []*entity.Clas
 
 	var studentArray = strings.Split(filter.StudentId, ",")
 	var teacherArray = strings.Split(filter.TeachersId, ",")
+	var sortBy = filter.SortBy
+
+	switch sortBy {
+
+	case "teacherName":
+		c.db.Order("Teachers.FirstName " + filter.SortType)
+
+	case "className":
+		c.db.Order("classes.Subject " + filter.SortType)
+
+	case "studentName":
+		c.db.Order("Students.FirstName " + filter.SortType)
+	}
 
 	c.db.Preload("Teachers").
 		Preload("Students").

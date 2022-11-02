@@ -5,4 +5,6 @@ type ClassFilter struct {
 	PerPage    int    `query:"perPage"`
 	StudentId  string `query:"studentId"`
 	TeachersId string `query:"teachersId""`
+	SortBy     string `query:"sortBy""`
+	SortType   string `query:"sortType"`
 }
