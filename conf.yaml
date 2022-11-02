@@ -1,0 +1,7 @@
+DBUSER     : "root"
+DBPASSWORD : "root"
+DBHOST     : "0.0.0.0"
+DBPORT     : "5432"
+DBNAME     : "postgres"
+DBTYPE     : "postgres"
+SERVERPORT : ":1323"

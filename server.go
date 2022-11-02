@@ -1,6 +1,7 @@
 package main
 
 import (
+	"server/config"
 	"server/entity"
 	"server/routes"
 	"server/storage"
@@ -21,6 +22,5 @@ func main() {
 	routes.InitStudentsRoutes(e, db)
 	routes.InitClassesRoutes(e, db)
 
-	//TODO move port to a variable stored in config file
-	e.Logger.Fatal(e.Start(":1323"))
+	e.Logger.Fatal(e.Start(config.ConfigInstance.SERVERPORT))
 }
