@@ -28,6 +28,7 @@ func (c ClassRepository) SearchClasses(filter filter.ClassFilter) []*entity.Clas
 	var teacherArray = strings.Split(filter.TeachersId, ",")
 	var sortBy = filter.SortBy
 
+	//TODO: SORTING NOT WORKING
 	switch sortBy {
 
 	case "teacherName":
@@ -44,10 +45,11 @@ func (c ClassRepository) SearchClasses(filter filter.ClassFilter) []*entity.Clas
 		Preload("Students").
 		Joins("LEFT JOIN students_classes on students_classes.class_id = classes.id").
 		Joins("LEFT JOIN students on students.id = students_classes.student_id").
-		Joins("JOIN teacher_classes on teacher_classes.class_id = classes.id").
-		Joins("JOIN teachers on teachers.id = teacher_classes.teacher_id").
+		Joins("LEFT JOIN teacher_classes on teacher_classes.class_id = classes.id").
+		Joins("LEFT JOIN teachers on teachers.id = teacher_classes.teacher_id").
 		Scopes(entity.FilterByStudentsId(studentArray),
 			entity.FilterByTeachersId(teacherArray)).
+		Group("classes.id").
 		Offset(offset).
 		Limit(filter.PerPage).
 		Find(&classes)
