@@ -1,17 +1,14 @@
 package storage
 
 import (
-	"log"
-
-	config "server/config"
-
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"log"
+	"server/config"
 )
 
-var DB *gorm.DB
-
-func NewDB(params ...string) *gorm.DB {
+func NewDB() *gorm.DB {
+	var DB *gorm.DB
 	var err error
 	conString := config.GetPostgresConnectionString()
 
@@ -21,9 +18,5 @@ func NewDB(params ...string) *gorm.DB {
 		log.Panic(err)
 	}
 
-	return DB.Debug()
-}
-
-func GetDBInstance() *gorm.DB {
 	return DB.Debug()
 }

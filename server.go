@@ -13,7 +13,7 @@ func main() {
 
 	db := storage.NewDB()
 
-	err := storage.GetDBInstance().AutoMigrate(&entity.Student{}, &entity.Class{}, &entity.Teacher{})
+	err := db.AutoMigrate(&entity.Student{}, &entity.Class{}, &entity.Teacher{})
 	if err != nil {
 		return
 	}
@@ -21,5 +21,6 @@ func main() {
 	routes.InitStudentsRoutes(e, db)
 	routes.InitClassesRoutes(e, db)
 
+	//TODO move port to a variable stored in config file
 	e.Logger.Fatal(e.Start(":1323"))
 }
