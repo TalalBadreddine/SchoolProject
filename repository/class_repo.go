@@ -25,14 +25,16 @@ func (c ClassRepository) SearchClasses(filter filter.ClassFilter) []*entity.Clas
 	offset := (filter.Page) * filter.PerPage
 
 	var studentArray = strings.Split(filter.StudentId, ",")
+	var teacherArray = strings.Split(filter.TeachersId, ",")
 
 	c.db.Preload("Teachers").
 		Preload("Students").
 		Joins("LEFT JOIN students_classes on students_classes.class_id = classes.id").
-		Joins("JOIN students on students.id = students_classes.student_id").
-		Joins("LEFT JOIN teacher_classes on teacher_classes.class_id = classes.id").
+		Joins("LEFT JOIN students on students.id = students_classes.student_id").
+		Joins("JOIN teacher_classes on teacher_classes.class_id = classes.id").
 		Joins("JOIN teachers on teachers.id = teacher_classes.teacher_id").
-		Scopes(entity.FilterByStudentsId(studentArray)).
+		Scopes(entity.FilterByStudentsId(studentArray),
+			entity.FilterByTeachersId(teacherArray)).
 		Offset(offset).
 		Limit(filter.PerPage).
 		Find(&classes)

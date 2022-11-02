@@ -1,7 +1,7 @@
 package entity
 
 import (
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 type Teacher struct {
@@ -16,7 +16,7 @@ type TeacherClassRequest struct {
 	ClassId   int `json:"classId"`
 }
 
-func FilterByTeachers(teachers []string) func(db *gorm.DB) *gorm.DB {
+func FilterByTeachersId(teachers []string) func(db *gorm.DB) *gorm.DB {
 	return func(db *gorm.DB) *gorm.DB {
 		if nil == teachers || len(teachers) == 0 || teachers[0] == "" {
 			return db
