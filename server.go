@@ -2,8 +2,8 @@ package main
 
 import (
 	"server/config"
-	"server/entity"
-	"server/routes"
+	"server/internal/adapter/db/entity"
+	"server/internal/routes"
 	"server/storage"
 
 	"github.com/labstack/echo/v4"
@@ -14,7 +14,7 @@ func main() {
 
 	db := storage.NewDB()
 
-	err := db.AutoMigrate(&entity.Student{}, &entity.Class{}, &entity.Teacher{})
+	err := db.AutoMigrate(&entity.Student{}, &entity.Class{}, &entity.Teacher{}, &entity.StudentsClasses{})
 	if err != nil {
 		return
 	}

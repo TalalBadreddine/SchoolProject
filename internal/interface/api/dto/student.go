@@ -1,12 +1,14 @@
 package dto
 
-import "server/entity"
+import (
+	"server/internal/domain/model"
+)
 
 type Student struct {
 	id        uint
 	FirstName string
 	LastName  string
-	Classes   []*Class
+	Classes   []*GeneralClass
 }
 
 type GeneralStudent struct {
@@ -15,25 +17,25 @@ type GeneralStudent struct {
 	LastName  string
 }
 
-func MapStudentDto(student *entity.Student) *Student {
+func MapStudentDto(student *model.Student) *Student {
 
-	var classes []*Class
+	var classes []*GeneralClass
 
 	for _, class := range student.Classes {
-		classes = append(classes, MapClassDto(class))
+		classes = append(classes, MapGeneralClassDto(class))
 	}
 
 	return &Student{
-		id:        student.ID,
+		id:        student.Id,
 		FirstName: student.FirstName,
 		LastName:  student.LastName,
 		Classes:   classes,
 	}
 }
 
-func MapGeneralStudentDto(student *entity.Student) *GeneralStudent {
+func MapGeneralStudentDto(student *model.Student) *GeneralStudent {
 	return &GeneralStudent{
-		id:        student.ID,
+		id:        student.Id,
 		FirstName: student.FirstName,
 		LastName:  student.LastName,
 	}

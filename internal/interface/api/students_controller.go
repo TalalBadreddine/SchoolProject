@@ -1,19 +1,19 @@
-package controller
+package api
 
 import (
 	"github.com/labstack/echo/v4"
 	"net/http"
-	"server/dto"
-	"server/filter"
-	"server/repository"
+	"server/internal/domain/model/filter"
+	"server/internal/interface/api/dto"
+	"server/internal/useCase/query"
 )
 
 type Student struct {
-	studentRepository repository.StudentRepository
+	GetAllStudents query.GetAllStudents
 }
 
-func ProvideStudent(studentRepository repository.StudentRepository) Student {
-	return Student{studentRepository: studentRepository}
+func ProvideStudent(s query.GetAllStudents) Student {
+	return Student{GetAllStudents: s}
 }
 
 func (s Student) GetStudents(c echo.Context) error {
@@ -25,7 +25,7 @@ func (s Student) GetStudents(c echo.Context) error {
 		return err
 	}
 
-	var students = s.studentRepository.SearchStudents(studentFilter)
+	var students = s.GetAllStudents.Handle(studentFilter)
 	var studentsDto []*dto.Student
 
 	for _, student := range students {

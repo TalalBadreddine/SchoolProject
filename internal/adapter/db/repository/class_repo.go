@@ -2,8 +2,11 @@ package repository
 
 import (
 	"gorm.io/gorm"
-	"server/entity"
-	"server/filter"
+	"server/internal/adapter/db/entity"
+	"server/internal/adapter/db/mapper"
+	"server/internal/domain/model"
+	"server/internal/domain/model/filter"
+	"server/internal/domain/repository"
 	"strings"
 )
 
@@ -11,11 +14,11 @@ type ClassRepository struct {
 	db *gorm.DB
 }
 
-func ProvideClassRepository(db *gorm.DB) ClassRepository {
+func ProvideClassRepository(db *gorm.DB) repository.ClassRepository {
 	return ClassRepository{db: db}
 }
 
-func (c ClassRepository) SearchClasses(filter filter.ClassFilter) []*entity.Class {
+func (c ClassRepository) SearchClasses(filter filter.ClassFilter) []*model.Class {
 	var classes []*entity.Class
 
 	if filter.PerPage == 0 {
@@ -28,14 +31,13 @@ func (c ClassRepository) SearchClasses(filter filter.ClassFilter) []*entity.Clas
 	var teacherArray = strings.Split(filter.TeachersId, ",")
 	var sortBy = filter.SortBy
 
-	//TODO: SORTING NOT WORKING
 	switch sortBy {
 
 	case "teacherName":
 		c.db.Order("Teachers.FirstName " + filter.SortType)
 
 	case "className":
-		c.db.Order("classes.Subject " + filter.SortType)
+		c.db = c.db.Order("classes.subject " + filter.SortType)
 
 	case "studentName":
 		c.db.Order("Students.FirstName " + filter.SortType)
@@ -54,5 +56,5 @@ func (c ClassRepository) SearchClasses(filter filter.ClassFilter) []*entity.Clas
 		Limit(filter.PerPage).
 		Find(&classes)
 
-	return classes
+	return mapper.MapToClassModelArray(classes)
 }

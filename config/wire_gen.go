@@ -8,20 +8,23 @@ package config
 
 import (
 	"gorm.io/gorm"
-	"server/controller"
-	"server/repository"
+	"server/internal/adapter/db/repository"
+	"server/internal/interface/api"
+	"server/internal/useCase/query"
 )
 
 // Injectors from wire.go:
 
-func WireStudentApi(db *gorm.DB) controller.Student {
+func WireStudentApi(db *gorm.DB) api.Student {
 	studentRepository := repository.ProvideStudentRepository(db)
-	student := controller.ProvideStudent(studentRepository)
+	getAllStudents := query.ProvideGetAllStudents(studentRepository)
+	student := api.ProvideStudent(getAllStudents)
 	return student
 }
 
-func WireClassApi(db *gorm.DB) controller.Class {
+func WireClassApi(db *gorm.DB) api.Class {
 	classRepository := repository.ProvideClassRepository(db)
-	class := controller.ProvideClass(classRepository)
+	getAllClasses := query.ProvideGetAllClasses(classRepository)
+	class := api.ProvideClass(getAllClasses)
 	return class
 }

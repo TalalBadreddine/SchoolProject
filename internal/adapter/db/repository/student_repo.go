@@ -2,8 +2,11 @@ package repository
 
 import (
 	"gorm.io/gorm"
-	"server/entity"
-	"server/filter"
+	"server/internal/adapter/db/entity"
+	"server/internal/adapter/db/mapper"
+	"server/internal/domain/model"
+	"server/internal/domain/model/filter"
+	"server/internal/domain/repository"
 	"strings"
 )
 
@@ -11,11 +14,11 @@ type StudentRepository struct {
 	db *gorm.DB
 }
 
-func ProvideStudentRepository(db *gorm.DB) StudentRepository {
+func ProvideStudentRepository(db *gorm.DB) repository.StudentRepository {
 	return StudentRepository{db: db}
 }
 
-func (s StudentRepository) SearchStudents(filter filter.StudentFilter) []*entity.Student {
+func (s StudentRepository) SearchStudents(filter filter.StudentFilter) []*model.Student {
 	var db = s.db
 	var students []*entity.Student
 
@@ -32,12 +35,14 @@ func (s StudentRepository) SearchStudents(filter filter.StudentFilter) []*entity
 	orderByMap := make(map[string]string)
 
 	orderByMap["studentName"] = "students.first_name "
+	orderByMap["teacherName"] = "teachers.first_name "
+	orderByMap["className"] = "classes.subject "
 
 	db.Preload("Classes").
 		Preload("Classes.Teachers").
 		Preload("Classes.Students").
-		Joins("LEFT JOIN students_classes on students_classes.student_id = students.id").
-		Joins("LEFT JOIN classes on classes.id = students_classes.class_id").
+		Joins("FULL OUTER JOIN students_classes on students_classes.student_id = students.id").
+		Joins("FULL OUTER JOIN classes on classes.id = students_classes.class_id").
 		Scopes(entity.FilterByClassesId(classArray),
 			entity.FilterByStudentsId(studentArray)).
 		Offset(offset).
@@ -45,5 +50,5 @@ func (s StudentRepository) SearchStudents(filter filter.StudentFilter) []*entity
 		Order(orderByMap[sortBy] + filter.SortType).
 		Find(&students)
 
-	return students
+	return mapper.MapToStudentModelArray(students)
 }

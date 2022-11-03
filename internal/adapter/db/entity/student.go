@@ -11,11 +11,6 @@ type Student struct {
 	Classes   []*Class `json:"studentsClasses" gorm:"many2many:students_classes; constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }
 
-type StudentClassRequest struct {
-	StudentId int `json:"studentId"`
-	ClassId   int `json:"classId"`
-}
-
 func FilterByStudentsId(student []string) func(db *gorm.DB) *gorm.DB {
 	return func(db *gorm.DB) *gorm.DB {
 		if nil == student || len(student) == 0 || student[0] == "" {

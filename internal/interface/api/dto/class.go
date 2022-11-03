@@ -1,8 +1,6 @@
 package dto
 
-import (
-	"server/entity"
-)
+import "server/internal/domain/model"
 
 type Class struct {
 	id       uint
@@ -18,7 +16,7 @@ type GeneralClass struct {
 	Code    string
 }
 
-func MapClassDto(class *entity.Class) *Class {
+func MapClassDto(class *model.Class) *Class {
 	var teachers []*GeneralTeacher
 	var students []*GeneralStudent
 
@@ -31,7 +29,7 @@ func MapClassDto(class *entity.Class) *Class {
 	}
 
 	return &Class{
-		id:       class.ID,
+		id:       class.Id,
 		Subject:  class.Subject,
 		Code:     class.Code,
 		Teachers: teachers,
@@ -39,9 +37,9 @@ func MapClassDto(class *entity.Class) *Class {
 	}
 }
 
-func MapGeneralClassDto(class *entity.Class) *GeneralClass {
+func MapGeneralClassDto(class *model.Class) *GeneralClass {
 	return &GeneralClass{
-		id:      class.ID,
+		id:      class.Id,
 		Subject: class.Subject,
 		Code:    class.Code,
 	}

@@ -6,23 +6,26 @@ package config
 import (
 	"github.com/google/wire"
 	"gorm.io/gorm"
-	"server/controller"
-	"server/repository"
+	"server/internal/adapter/db/repository"
+	"server/internal/interface/api"
+	"server/internal/useCase/query"
 )
 
-func WireStudentApi(db *gorm.DB) controller.Student {
+func WireStudentApi(db *gorm.DB) api.Student {
 	wire.Build(
-		controller.ProvideStudent,
+		api.ProvideStudent,
+		query.ProvideGetAllStudents,
 		repository.ProvideStudentRepository,
 	)
-	return controller.Student{}
+	return api.Student{}
 }
 
-func WireClassApi(db *gorm.DB) controller.Class {
+func WireClassApi(db *gorm.DB) api.Class {
 	wire.Build(
-		controller.ProvideClass,
+		api.ProvideClass,
+		query.ProvideGetAllClasses,
 		repository.ProvideClassRepository,
 	)
 
-	return controller.Class{}
+	return api.Class{}
 }

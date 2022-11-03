@@ -1,20 +1,19 @@
-package controller
+package api
 
 import (
-	"net/http"
-	"server/dto"
-	"server/filter"
-	"server/repository"
-
 	"github.com/labstack/echo/v4"
+	"net/http"
+	"server/internal/domain/model/filter"
+	"server/internal/interface/api/dto"
+	"server/internal/useCase/query"
 )
 
 type Class struct {
-	ClassRepository repository.ClassRepository
+	GetAllClasses query.GetAllClasses
 }
 
-func ProvideClass(classRepository repository.ClassRepository) Class {
-	return Class{ClassRepository: classRepository}
+func ProvideClass(c query.GetAllClasses) Class {
+	return Class{GetAllClasses: c}
 }
 
 func (class Class) GetClasses(c echo.Context) error {
@@ -27,7 +26,7 @@ func (class Class) GetClasses(c echo.Context) error {
 		return err
 	}
 
-	classes := class.ClassRepository.SearchClasses(classFilter)
+	classes := class.GetAllClasses.Handle(classFilter)
 	var classesDto []*dto.Class
 
 	for _, class := range classes {

@@ -9,5 +9,5 @@ import (
 func InitClassesRoutes(e *echo.Echo, db *gorm.DB) {
 	ClassApi := config.WireClassApi(db)
 
-	e.GET("classes", ClassApi.GetClasses)
+	e.GET("classes", ClassApi.GetAllClasses)
 }
