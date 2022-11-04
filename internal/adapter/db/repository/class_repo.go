@@ -45,13 +45,15 @@ func (c ClassRepository) SearchClasses(filter filter.ClassFilter) []*model.Class
 
 	c.db.Preload("Teachers").
 		Preload("Students").
+		Preload("StudentsClasses").
 		Joins("LEFT JOIN students_classes on students_classes.class_id = classes.id").
-		Joins("LEFT JOIN students on students.id = students_classes.student_id").
+		Joins("LEFT JOIN students on students.id = students_classes.student_id ").
 		Joins("LEFT JOIN teacher_classes on teacher_classes.class_id = classes.id").
 		Joins("LEFT JOIN teachers on teachers.id = teacher_classes.teacher_id").
 		Scopes(entity.FilterByStudentsId(studentArray),
 			entity.FilterByTeachersId(teacherArray)).
-		Group("classes.id").
+		Distinct().
+		Order("students_classes.grade desc").
 		Offset(offset).
 		Limit(filter.PerPage).
 		Find(&classes)

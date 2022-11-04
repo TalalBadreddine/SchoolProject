@@ -35,3 +35,23 @@ func (class Class) GetClasses(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, classesDto)
 }
+
+func (class Class) GetStatistics(c echo.Context) error {
+	var classFilter filter.ClassFilter
+
+	err := c.Bind(&classFilter)
+
+	if err != nil {
+		return err
+	}
+
+	classes := class.GetAllClasses.Handle(classFilter)
+
+	var statisticsDto []*dto.Statistics
+
+	for _, class := range classes {
+		statisticsDto = append(statisticsDto, dto.MapToStatistics(class))
+	}
+
+	return c.JSON(http.StatusOK, statisticsDto)
+}

@@ -41,6 +41,7 @@ func (s StudentRepository) SearchStudents(filter filter.StudentFilter) []*model.
 	db.Preload("Classes").
 		Preload("Classes.Teachers").
 		Preload("Classes.Students").
+		Preload("StudentClasses").
 		Joins("FULL OUTER JOIN students_classes on students_classes.student_id = students.id").
 		Joins("FULL OUTER JOIN classes on classes.id = students_classes.class_id").
 		Scopes(entity.FilterByClassesId(classArray),

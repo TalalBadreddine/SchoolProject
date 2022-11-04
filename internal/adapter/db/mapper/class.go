@@ -12,11 +12,12 @@ func MapToClassModel(s *entity.Class) *model.Class {
 	}
 
 	return &model.Class{
-		Id:       s.ID,
-		Subject:  s.Subject,
-		Code:     s.Code,
-		Teachers: MapToTeacherModelArray(s.Teachers),
-		Students: MapToStudentModelArray(s.Students),
+		Id:              s.ID,
+		Subject:         s.Subject,
+		Code:            s.Code,
+		Teachers:        MapToTeacherModelArray(s.Teachers),
+		Students:        MapToStudentModelArray(s.Students),
+		StudentsClasses: MapToStudentClassArray(s.StudentsClasses),
 	}
 
 }

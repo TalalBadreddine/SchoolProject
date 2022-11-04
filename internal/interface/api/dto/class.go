@@ -14,6 +14,7 @@ type GeneralClass struct {
 	id      uint
 	Subject string
 	Code    string
+	Grade   int
 }
 
 func MapClassDto(class *model.Class) *Class {
@@ -25,7 +26,11 @@ func MapClassDto(class *model.Class) *Class {
 	}
 
 	for _, student := range class.Students {
-		students = append(students, MapGeneralStudentDto(student))
+		for _, studentClass := range class.StudentsClasses {
+			if student.Id == studentClass.StudentId {
+				students = append(students, MapStudentInClass(student, studentClass.Grade))
+			}
+		}
 	}
 
 	return &Class{
@@ -37,10 +42,11 @@ func MapClassDto(class *model.Class) *Class {
 	}
 }
 
-func MapGeneralClassDto(class *model.Class) *GeneralClass {
+func MapClassForStudentDto(class *model.Class, grade int) *GeneralClass {
 	return &GeneralClass{
 		id:      class.Id,
 		Subject: class.Subject,
 		Code:    class.Code,
+		Grade:   grade,
 	}
 }

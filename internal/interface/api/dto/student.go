@@ -15,6 +15,7 @@ type GeneralStudent struct {
 	id        uint
 	FirstName string
 	LastName  string
+	Grade     int
 }
 
 func MapStudentDto(student *model.Student) *Student {
@@ -22,7 +23,17 @@ func MapStudentDto(student *model.Student) *Student {
 	var classes []*GeneralClass
 
 	for _, class := range student.Classes {
-		classes = append(classes, MapGeneralClassDto(class))
+		for _, studentClass := range student.StudentClasses {
+			if class.Id == studentClass.ClassId {
+				classes = append(classes, MapClassForStudentDto(class, studentClass.Grade))
+			}
+		}
+	}
+
+	var studentsClasses []*StudentsClasses
+
+	for _, studentClass := range student.StudentClasses {
+		studentsClasses = append(studentsClasses, MapToStudentsClassesDto(studentClass))
 	}
 
 	return &Student{
@@ -33,10 +44,11 @@ func MapStudentDto(student *model.Student) *Student {
 	}
 }
 
-func MapGeneralStudentDto(student *model.Student) *GeneralStudent {
+func MapStudentInClass(student *model.Student, grade int) *GeneralStudent {
 	return &GeneralStudent{
 		id:        student.Id,
 		FirstName: student.FirstName,
 		LastName:  student.LastName,
+		Grade:     grade,
 	}
 }

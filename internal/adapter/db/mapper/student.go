@@ -11,9 +11,11 @@ func MapToStudentModel(s *entity.Student) *model.Student {
 	}
 
 	return &model.Student{
-		Id:        s.ID,
-		FirstName: s.FirstName,
-		LastName:  s.LastName,
+		Id:             s.ID,
+		FirstName:      s.FirstName,
+		LastName:       s.LastName,
+		Classes:        MapToClassModelArray(s.Classes),
+		StudentClasses: MapToStudentClassArray(s.StudentClasses),
 	}
 }
 
