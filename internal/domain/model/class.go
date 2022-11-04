@@ -7,4 +7,5 @@ type Class struct {
 	Teachers        []*Teacher         `json:"teachers"`
 	Students        []*Student         `json:"students"`
 	StudentsClasses []*StudentsClasses `json:"studentsClasses"`
+	HighestGrade    int                `json:"highestGrade"`
 }

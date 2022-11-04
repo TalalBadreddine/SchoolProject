@@ -3,11 +3,12 @@ package dto
 import "server/internal/domain/model"
 
 type Class struct {
-	id       uint
-	Subject  string
-	Code     string
-	Teachers []*GeneralTeacher
-	Students []*GeneralStudent
+	id           uint
+	Subject      string
+	Code         string
+	Teachers     []*GeneralTeacher
+	Students     []*GeneralStudent
+	HighestGrade int
 }
 
 type GeneralClass struct {
@@ -34,11 +35,12 @@ func MapClassDto(class *model.Class) *Class {
 	}
 
 	return &Class{
-		id:       class.Id,
-		Subject:  class.Subject,
-		Code:     class.Code,
-		Teachers: teachers,
-		Students: students,
+		id:           class.Id,
+		Subject:      class.Subject,
+		Code:         class.Code,
+		Teachers:     teachers,
+		Students:     students,
+		HighestGrade: class.HighestGrade,
 	}
 }
 

@@ -18,6 +18,7 @@ func MapToClassModel(s *entity.Class) *model.Class {
 		Teachers:        MapToTeacherModelArray(s.Teachers),
 		Students:        MapToStudentModelArray(s.Students),
 		StudentsClasses: MapToStudentClassArray(s.StudentsClasses),
+		HighestGrade:    s.HighestGrade,
 	}
 
 }
