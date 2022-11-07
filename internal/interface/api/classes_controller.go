@@ -47,11 +47,11 @@ func (class Class) GetStatistics(c echo.Context) error {
 
 	classes := class.GetAllClasses.Handle(classFilter)
 
-	var statisticsDTo []*dto.Statistics
+	var statisticsDto []*dto.Statistics
 
 	for _, class := range classes {
-		statisticsDTo = append(statisticsDTo, dto.MapToStatistics(class))
+		statisticsDto = append(statisticsDto, dto.MapToStatistics(class))
 	}
 
-	return c.JSON(http.StatusOK, statisticsDTo)
+	return c.JSON(http.StatusOK, statisticsDto)
 }
